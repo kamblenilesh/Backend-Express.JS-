@@ -1,17 +1,12 @@
-// importing path
 const path = require('path');
 
-// import express
 const express = require('express');
 
-const rootDir = require('../util/path');
+// import controller
+const productsController = require('../controllers/products');
 
-// import router using module
-const shopRouter = express.Router();
+const router = express.Router();
 
-// get, post, del get extract match not 'use' method
-shopRouter.get('/',(req, res, next) => {
-    res.sendFile(path.join(rootDir, 'views', 'shop.html')); // create path bcz windonws & mac has different path
-});
+router.get('/', productsController.getProducts);  // call controller & pass reference 'getProducts' function
 
-module.exports = shopRouter;
+module.exports = router;

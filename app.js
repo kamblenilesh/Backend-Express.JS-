@@ -7,8 +7,17 @@ const express = require('express');
 // import body-parser
 const bodyParser = require('body-parser');
 
+// import controller
+const successController = require('./controllers/successPage');
+
+// import controller
+const errorController = require('./controllers/error');
+
 // Creating express application,   express as function
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 // importing admin-router object
 const adminRoutes = require('./routes/admin');
@@ -31,13 +40,9 @@ app.use(shopRoutes);
 app.use(contactRoutes);
 
 // Success Page
-app.use('/success',(req, res, next) => {
-    res.sendFile(path.join(__dirname, 'views', 'success.html'));
-});
+app.use('/success', successController.getSuccessPage);
 
 // Error Page
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
-});
+app.use(errorController.get404);
 
 app.listen(4000);

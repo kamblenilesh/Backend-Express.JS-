@@ -1,27 +1,16 @@
-// importing path
 const path = require('path');
 
-// import express
 const express = require('express');
 
-const rootDir = require('../util/path');
+// import controller
+const productsController = require('../controllers/products');
 
-// import router using module
 const router = express.Router();
 
-// object, add get method which handle requestHandler, next is function
-// GET request
-router.get('/add-product', (req, res, next) => { // next() is not use
-    res.sendFile(path.join(rootDir, 'views', 'add-product.html')); // create path bcz windonws & mac has different path
-});
+// /admin/add-product => GET
+router.get('/add-product', productsController.getAddProduct); // call controller & pass reference 'getAddProduct' function
 
-// Execution from top to bottom
-// filtering request like post, get, del
-// two different path due to method (in 1. get & 2. post)
-// POST request
-router.post('/add-product', (req, res, next) => {
-    console.log(req.body); // Extracting user send
-    res.redirect('/');  // redirect to '/'
-});
+// /admin/add-product => POST
+router.post('/add-product', productsController.postAddProduct);
 
 module.exports = router;
