@@ -13,6 +13,9 @@ const successController = require('./controllers/successPage');
 // import controller
 const errorController = require('./controllers/error');
 
+// import database
+const db = require('./util/database');
+
 // Creating express application,   express as function
 const app = express();
 
@@ -27,6 +30,9 @@ const shopRoutes = require('./routes/shop');
 
 // importing contact-router object
 const contactRoutes = require('./routes/contact');
+
+// Execute MySQL Query
+db.execute('SELECT * FROM products');
 
 // send through a form
 app.use(bodyParser.urlencoded({extended: false}));
