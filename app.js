@@ -32,7 +32,13 @@ const shopRoutes = require('./routes/shop');
 const contactRoutes = require('./routes/contact');
 
 // Execute MySQL Query
-db.execute('SELECT * FROM products');
+db.execute('SELECT * FROM products')
+    .then(result => {
+        console.log(result[0]);
+    })
+    .catch(err => {
+        console.log(err);
+    });
 
 // send through a form
 app.use(bodyParser.urlencoded({extended: false}));
