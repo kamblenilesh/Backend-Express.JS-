@@ -31,9 +31,6 @@ const shopRoutes = require('./routes/shop');
 // importing contact-router object
 const contactRoutes = require('./routes/contact');
 
-// Execute MySQL Query
-db.execute('SELECT * FROM products');
-
 // send through a form
 app.use(bodyParser.urlencoded({extended: false}));
 
