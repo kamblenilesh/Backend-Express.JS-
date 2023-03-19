@@ -14,7 +14,7 @@ const successController = require('./controllers/successPage');
 const errorController = require('./controllers/error');
 
 // import database
-const db = require('./util/database');
+const sequelize = require('./util/database');
 
 // Creating express application,   express as function
 const app = express();
@@ -48,4 +48,12 @@ app.use('/success', successController.getSuccessPage);
 // Error Page
 app.use(errorController.get404);
 
-app.listen(4000);
+sequelize
+    .sync()
+    .then(result => {
+        console.log(result);
+        app.listen(4000);
+    })
+    .catch(err => {
+        console.log(err);
+    });
