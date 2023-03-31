@@ -22,6 +22,18 @@ const Product = require('./models/product');
 // import User
 const User = require('./models/user');
 
+// import Cart
+const Cart = require('./models/cart');
+
+// import CartItem
+const CartItem = require('./models/cart-item');
+
+// import Order
+const Order = require('./models/order');
+
+// import OrderItem
+const OrderItem = require('./models/order-item');
+
 // for cross request
 const cors = require('cors');
 
@@ -69,55 +81,6 @@ app.use(contactRoutes);
 // Expenses routrs
 app.use('/expenses', expenseRoutes);
 
-// // POST for booking
-// app.post('/user/add-user', async (req, res, next) => {
-//     try {
-//         if (!req.body.email) {
-//             throw new Error('Email is mandatory')
-//         }
-
-//         // Get value
-//         const name = req.body.uname;
-//         const email = req.body.email;
-
-//         // store in User table
-//         const data = await User.create({ name: name, email: email });
-//         // SET Status 201  &  send JSON respone
-//         res.status(201).json({ newUserDetail: data });
-//     } catch (err) {
-//         res.status(500).json({
-//             error: err
-//         });
-//     }
-// });
-
-// // GET for booking
-// app.get('/user/get-users', async (req, res, next) => {
-//     try {
-//         // using findAll Express method
-//         const users = await User.findAll();
-//         res.status(200).json({ allUsers: users });
-//     } catch (err) {
-//         res.status(500).json({ error: err });
-//     }
-// });
-
-// // DELETE for booking
-// app.delete('/user/delete-user/:id', async (req, res, next) => {
-//     const userId = req.params.id;
-//     try {
-//         if (!userId == 'undefined') {
-//             return res.status(400).json({ error: 'TD is missing' });
-//         }
-
-//         // delete user from table
-//         await User.destroy({ where: { id: userId } });
-//         res.status(200);
-//     } catch (err) {
-//         res.status(500).json({ error: err });
-//     }
-// });
-
 // Success Page
 app.use('/success', successController.getSuccessPage);
 
@@ -126,8 +89,16 @@ app.use(errorController.get404);
 
 Product.belongsTo(User, { contraints: true, onDelete: 'CASCADE' });
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
 
 sequelize
+    // .sync( {force: true})
     .sync()
     .then(result => {
         return User.findByPk(1);
@@ -141,6 +112,9 @@ sequelize
     })
     .then(user => {
         // console.log(user);
+        return user.createCart();
+    })
+    .then(cart => {
         app.listen(4000);
     })
     .catch(err => {
